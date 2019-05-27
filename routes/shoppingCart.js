@@ -1,0 +1,21 @@
+import { Router } from 'express'
+import controller from '../controllers/shoppingCart'
+import validate, { checkUpdateCartValidity } from '../middlewares/validateRequest'
+
+const router = Router()
+
+router.get('/generateUniqueId', controller.generateUniqueId())
+// router.post('/add', validate, controller.addProductToCart())
+// router.get('/:cart_id', controller.getItemsFromCart())
+// router.put('/update/:item_id', checkUpdateCartValidity(), controller.updateItemInCart())
+
+// router.get('/totalAmount/:cart_id',
+//   controller.getTotalAmountFromCart())
+// router.get('/saveForLater/:item_id', controller.saveProductForLater())
+
+// router.get('/getSaved/:cart_id', controller.getItemsSavedForLater())
+// router.get('/moveToCart/:item_id', controller.moveToCart())
+// router.delete('/removeProduct/:item_id', controller.removeItemFromCart())
+
+// router.delete('/empty/:cart_id', controller.emptyCart())
+export default router
