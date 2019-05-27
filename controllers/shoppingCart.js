@@ -29,28 +29,8 @@ function addItemToCart () {
     } else {
       service.incrQuantity(cart)
     }
-    let items = await service.findAllSavedItems(cart_id)
-    var itemArray = []
-    let subtotal = 0
-
-    for (let i = 0; i < items.length; i++) {
-      let item = items[i]
-      let product = await service.findProduct(item.dataValues.product_id)
-      subtotal = parseInt(subtotal) + parseInt(product.price)
-      let productObj = {
-        item_id: item.dataValues.item_id,
-        name: product.name,
-        attributes: item.dataValues.attributes,
-        product_id,
-        price: product.price,
-        quantity: item.dataValues.quantity,
-        image: product.image,
-        subtotal
-      }
-      itemArray.push(productObj)
-    }
-
-    return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    let response = await globalfunc.getCartInfo(cart_id)
+    return res.json(response).status(constants.NETWORK_CODES.HTTP_SUCCESS)
   })
 }
 
@@ -125,21 +105,21 @@ function addItemToCart () {
 //   })
 // }
 
-// function findItemsSavedForLater () {
-//   return asyncF(async (req, res) => {
-//     const { cart_id } = req.params
-//     const allItems = await service.findAllSavedItems(cart_id)
-//     if (!isEmpty(allItems)) {
-//       const items = prepareSavedItems(allItems)
-//       return res.json(items).status(constants.NETWORK_CODES.HTTP_SUCCESS)
-//     }
-//     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.SVD_02),
-//       message: constants.ERROR_CODES.SVD_02,
-//       field: 'item_id'
-//     })
-//   })
-// }
+function findItemsInCart () {
+  return asyncF(async (req, res) => {
+    const { cart_id } = req.params
+    const allItems = await service.findAllSavedItems(cart_id)
+    if (!isEmpty(allItems)) {
+      let response = await globalfunc.getCartInfo(cart_id)
+      return res.json(response).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
+    return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+      code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.SVD_02),
+      message: constants.ERROR_CODES.SVD_02,
+      field: 'item_id'
+    })
+  })
+}
 
 // function moveToCart () {
 //   return asyncF(async (req, res) => {
@@ -203,7 +183,7 @@ function addItemToCart () {
 export default {
 //   emptyCart,
   addItemToCart,
-  //   updateItemInCart,
+  findItemsInCart,
   //   removeItemFromCart,
   //   moveToCart,
   //   findItemsSavedForLater,

@@ -1,13 +1,13 @@
 import { Router } from 'express'
 import controller from '../controllers/shoppingCart'
 import validate, { checkUpdateCartValidity } from '../middlewares/validateRequest'
-import authenticate from '../middlewares/authenticate';
+import authenticate from '../middlewares/authenticate'
 
 const router = Router()
 
 router.get('/generateUniqueId', controller.generateUniqueId())
 router.post('/add', authenticate.verifyUser, controller.addItemToCart())
-// router.get('/:cart_id', controller.getItemsFromCart())
+router.get('/:cart_id', controller.findItemsInCart())
 // router.put('/update/:item_id', checkUpdateCartValidity(), controller.updateItemInCart())
 
 // router.get('/totalAmount/:cart_id',
