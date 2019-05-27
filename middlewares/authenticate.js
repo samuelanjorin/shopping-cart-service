@@ -34,5 +34,4 @@ const verifyUser = (req, res, next) => {
   }
 }
 
-
 export default { verifyUser }

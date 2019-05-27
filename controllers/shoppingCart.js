@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import isEmpty from 'lodash.isempty'
 import service from '../services/shoppingCart'
-import formatCart, { prepareSavedItems } from '../utils/cart'
+// import formatCart, { prepareSavedItems } from '../utils/cart'
 import constants from '../constants/index'
 import asyncF from '../middlewares/async'
 import globalfunc from '../utils/globalfunc'
@@ -13,29 +13,46 @@ function generateUniqueId () {
   })
 }
 
-// function addProductToCart () {
-//   return asyncF(async (req, res) => {
-//     /// // find product
-//     const { body: { cart_id, product_id, attributes } } = req
-//     const cart = await service.findOneCart(cart_id, attributes, product_id)
+function addItemToCart () {
+  return asyncF(async (req, res) => {
+    const { body: { cart_id, product_id, attributes } } = req
+    const cart = await service.checkCart(cart_id, attributes, product_id)
 
-//     if (isEmpty(cart)) {
-//       await service.createCart({
-//         cart_id,
-//         product_id,
-//         buy_now: constants.CART.MOVE_TO_CART,
-//         attributes,
-//         quantity: 1,
-//         added_on: new Date()
-//       })
-//     } else {
-//       await cart.increment('quantity')
-//     }
+    if (cart === null) {
+      await service.newCart({
+        cart_id,
+        product_id,
+        attributes,
+        quantity: 1,
+        buy_now: constants.CART.MOVE_TO_CART,
+        added_on: new Date() })
+    } else {
+      service.incrQuantity(cart)
+    }
+    let items = await service.findAllSavedItems(cart_id)
+    var itemArray = []
+    let subtotal = 0
 
-//     const allProductsInCart = await service.getProducts(cart_id)
-//     return res.json(formatCart(allProductsInCart)).status(constants.NETWORK_CODES.HTTP_SUCCESS)
-//   })
-// }
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i]
+      let product = await service.findProduct(item.dataValues.product_id)
+      subtotal = parseInt(subtotal) + parseInt(product.price)
+      let productObj = {
+        item_id: item.dataValues.item_id,
+        name: product.name,
+        attributes: item.dataValues.attributes,
+        product_id,
+        price: product.price,
+        quantity: item.dataValues.quantity,
+        image: product.image,
+        subtotal
+      }
+      itemArray.push(productObj)
+    }
+
+    return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+  })
+}
 
 // function findItemsFromCart () {
 //   return asyncF(async (req, res) => {
@@ -185,13 +202,13 @@ function generateUniqueId () {
 // }
 export default {
 //   emptyCart,
-//   addProductToCart,
-//   updateItemInCart,
-//   removeItemFromCart,
-//   moveToCart,
-//   findItemsSavedForLater,
-//   saveProductForLater,
-//   findtotalAmountFromCart,
-//   findItemsFromCart,
-   generateUniqueId
+  addItemToCart,
+  //   updateItemInCart,
+  //   removeItemFromCart,
+  //   moveToCart,
+  //   findItemsSavedForLater,
+  //   saveProductForLater,
+  //   findtotalAmountFromCart,
+  //   findItemsFromCart,
+  generateUniqueId
 }

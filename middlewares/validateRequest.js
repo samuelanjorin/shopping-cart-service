@@ -1,5 +1,5 @@
 import { check, validationResult } from 'express-validator/check'
-import { validator } from '../validations/validator'
+import validate from '../validations/validator'
 import {
   addShoppingCartSchema
 } from '../validations/schemas/schema'
@@ -23,7 +23,7 @@ const getSchema = req => {
  * @returns {funcion} HTTP response
  */
 export default async (req, res, next) => {
-  const validation = await validator(req.body, getSchema(req))
+  const validation = await validate.validator(req.body, getSchema(req))
   if (validation.hasError) {
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       errors: validation.errors

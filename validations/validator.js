@@ -10,7 +10,7 @@ import globalfunc from '../utils/globalfunc'
  * @returns {object} true if no error | array of errors
  */
 
-export const validator = async (inputData, schema) => {
+async function validator (inputData, schema) {
   try {
     const fields = await Joi.validate(inputData, schema, {
       abortEarly: false
@@ -27,3 +27,4 @@ export const validator = async (inputData, schema) => {
     return { hasError: true, error }
   }
 }
+export default { validator }

@@ -42,4 +42,10 @@ function getToken (req) {
   return userKey[1]
 }
 
-export default { getKeyByValue, getUniqueId, getPageParams, isValueValid, convertObjectValuesRecursive, getToken }
+export default { getKeyByValue,
+  getUniqueId,
+  getPageParams,
+  isValueValid,
+  convertObjectValuesRecursive,
+  getToken
+}
