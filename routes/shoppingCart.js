@@ -15,6 +15,6 @@ router.get('/moveToCart/:item_id', controller.moveItemToCartOrSafeForLater(const
 router.get('/safeForLater/:item_id', controller.moveItemToCartOrSafeForLater(constants.CART.SAVE_FOR_LATER))
 router.get('/totalAmount/:cart_id', controller.findtotalAmountFromCart())
 router.get('/getSaved/:cart_id', controller.findSavedForLaterItems())
-//router.delete('/removeProduct/:item_id', controller.removeItemFromCart())
+router.delete('/removeProduct/:item_id', controller.removeItemFromCart())
 
 export default router

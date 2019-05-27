@@ -7,15 +7,6 @@ import networkRequest from '../utils/networkRequest'
 
 const { shopping_cart } = db
 
-// async function findProducts (cart_id, option = true) {
-//   return shopping_cart.findAll({
-//     where: {
-//       cart_id,
-//       buy_now: constants.CART.MOVE_TO_CART
-//     }
-//   })
-// }
-
 async function checkCart (cart_id, attributes, product_id) {
   return shopping_cart.findOne({
     where: {
@@ -75,14 +66,6 @@ async function updateItemInCart (item_id, quantity) {
   return item
 }
 
-// async function findItem (item_id) {
-//   return await shopping_cart.findOne({
-//     where: {
-//       item_id
-//     }
-//   })
-// }
-
 async function incrQuantity (cart, quantity) {
   quantity = cart.quantity + parseInt(quantity)
   return await shopping_cart.update(
@@ -92,9 +75,6 @@ async function incrQuantity (cart, quantity) {
 }
 
 async function moveOrSafeToCart (item_id, payload) {
-  // shoppingCart.buy_now = payload
-  // await shopping_cart.create(shoppingCart)
-  console.log(payload)
   return await shopping_cart.update(
     payload,
     { returning: true, where: { item_id } }
@@ -111,17 +91,22 @@ async function findProduct (product_id) {
   return product
 }
 
+async function removeItem (item_id) {
+  return await shopping_cart.destroy({
+    where: {
+      item_id
+    }
+  })
+}
+
 export default {
-//   findAllSavedItems,
   checkCart,
   newCart,
   incrQuantity,
   emptyCart,
   moveOrSafeToCart,
-  //   createCart,
-  //   findProducts,
   findItem,
-  //   findCart,
+  removeItem,
   updateItemInCart,
   findAllSavedItems,
   findAllCartItems,
