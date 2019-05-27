@@ -8,7 +8,7 @@ const router = Router()
 router.get('/generateUniqueId', controller.generateUniqueId())
 router.post('/add', authenticate.verifyUser, controller.addItemToCart())
 router.get('/:cart_id', controller.findItemsInCart())
-// router.put('/update/:item_id', checkUpdateCartValidity(), controller.updateItemInCart())
+router.put('/update/:item_id', controller.updateItemInCart())
 
 // router.get('/totalAmount/:cart_id',
 //   controller.getTotalAmountFromCart())

@@ -26,8 +26,15 @@ async function checkCart (cart_id, attributes, product_id) {
   })
 }
 
+async function findItem (item_id) {
+  return await shopping_cart.findOne({
+    where: {
+      item_id
+    }
+  })
+}
+
 async function newCart (payload) {
-  console.log('shopping_cart:', shopping_cart)
   return await shopping_cart.create(payload)
 }
 
@@ -48,13 +55,16 @@ async function findAllSavedItems (cart_id) {
   })
 }
 
-// async function findCart (cart_id) {
-//   return await shopping_cart.findOne({
-//     where: {
-//       cart_id
-//     }
-//   })
-// }
+async function updateItemInCart (item_id, quantity) {
+  await shopping_cart.update(
+    quantity,
+    {
+      returning: true,
+      where: { item_id: item_id } }
+  )
+  let item = await findItem(item_id)
+  return item
+}
 
 // async function findItem (item_id) {
 //   return await shopping_cart.findOne({
@@ -64,8 +74,8 @@ async function findAllSavedItems (cart_id) {
 //   })
 // }
 
-async function incrQuantity (cart) {
-  let quantity = cart.quantity + 1
+async function incrQuantity (cart, quantity) {
+  quantity = cart.quantity + parseInt(quantity)
   return await shopping_cart.update(
     { quantity },
     { returning: true, where: { cart_id: cart.cart_id, product_id: cart.product_id } }
@@ -97,7 +107,6 @@ export default {
   //   findProducts,
   //   findItem,
   //   findCart,
-  //   updateItem,
-  //   saveOrMoveToCart,
+  updateItemInCart,
   findAllSavedItems,
   findProduct }
