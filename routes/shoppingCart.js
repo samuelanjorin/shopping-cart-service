@@ -2,6 +2,7 @@ import { Router } from 'express'
 import controller from '../controllers/shoppingCart'
 import validate, { checkUpdateCartValidity } from '../middlewares/validateRequest'
 import authenticate from '../middlewares/authenticate'
+import constants from '../constants/index'
 
 const router = Router()
 
@@ -10,7 +11,8 @@ router.post('/add', authenticate.verifyUser, controller.addItemToCart())
 router.get('/:cart_id', controller.findItemsInCart())
 router.put('/update/:item_id', controller.updateItemInCart())
 router.delete('/empty/:cart_id', controller.emptyCart())
-router.get('/moveToCart/:item_id', controller.moveItemToCart())
+router.get('/moveToCart/:item_id', controller.moveItemToCartOrSafeForLater(constants.CART.MOVE_TO_CART))
+router.get('/safeForLater/:item_id', controller.moveItemToCartOrSafeForLater(constants.CART.SAVE_FOR_LATER))
 // router.get('/totalAmount/:cart_id',
 //   controller.getTotalAmountFromCart())
 // router.get('/saveForLater/:item_id', controller.saveProductForLater())

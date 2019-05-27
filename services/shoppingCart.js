@@ -85,8 +85,9 @@ async function incrQuantity (cart, quantity) {
 async function moveOrSafeToCart (item_id, payload) {
   // shoppingCart.buy_now = payload
   // await shopping_cart.create(shoppingCart)
+  console.log(payload)
   return await shopping_cart.update(
-    { payload },
+    payload,
     { returning: true, where: { item_id } }
   )
 }

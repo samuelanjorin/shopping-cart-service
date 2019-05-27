@@ -120,7 +120,7 @@ function findItemsInCart () {
   })
 }
 
-function moveItemToCart () {
+function moveItemToCartOrSafeForLater (option) {
   return asyncF(async (req, res) => {
     let item_id = req.params.item_id
     if (globalfunc.isValueValid(item_id)) {
@@ -132,7 +132,7 @@ function moveItemToCart () {
           field: 'item_id'
         })
       }
-      await service.moveOrSafeToCart(item_id, { buy_now: constants.CART.MOVE_TO_CART })
+      await service.moveOrSafeToCart(item_id, { buy_now: option })
       return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
@@ -185,7 +185,7 @@ export default {
   findItemsInCart,
   updateItemInCart,
   emptyCart,
-  moveItemToCart,
+  moveItemToCartOrSafeForLater,
   //   removeItemFromCart,
   //   moveToCart,
   //   findItemsSavedForLater,
