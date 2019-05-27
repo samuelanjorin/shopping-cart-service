@@ -34,21 +34,6 @@ function addItemToCart () {
   })
 }
 
-// function findItemsFromCart () {
-//   return asyncF(async (req, res) => {
-//     const { cart_id } = req.params
-//     const items = await service.findProducts(cart_id)
-//     if (!isEmpty(items)) {
-//       return res.json(formatCart(items)).status(constants.NETWORK_CODES.HTTP_SUCCESS)
-//     }
-//     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
-//       message: constants.ERROR_CODES.CRT_01,
-//       field: 'cart_id'
-//     })
-//   })
-// }
-
 function updateItemInCart () {
   return asyncF(async (req, res) => {
     let item_id = req.params.item_id
@@ -81,18 +66,10 @@ function findtotalAmountFromCart () {
   })
 }
 
-// function saveProductForLater () {
-//   return asyncF(async (req, res) => {
-//     const { item } = req
-//     await item.saveOrMoveToCart(constants.CART.SAVE_FOR_LATER)
-//     return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
-//   })
-// }
-
 function findItemsInCart () {
   return asyncF(async (req, res) => {
     const { cart_id } = req.params
-    const allItems = await service.findAllSavedItems(cart_id)
+    const allItems = await service.findAllCartItems(cart_id)
     if (!isEmpty(allItems)) {
       let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
       return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
@@ -127,7 +104,21 @@ function moveItemToCartOrSafeForLater (option) {
     })
   })
 }
-
+function findSavedForLaterItems () {
+  return asyncF(async (req, res) => {
+    const { cart_id } = req.params
+    const allItems = await service.findAllSavedItems(cart_id)
+    if (!isEmpty(allItems)) {
+      let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.SAVE_FOR_LATER)
+      return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
+    return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+      code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),
+      message: constants.ERROR_CODES.CRT_02,
+      field: 'item_id'
+    })
+  })
+}
 // function removeItemFromCart () {
 //   return asyncF(async (req, res) => {
 //     if (globalfunc.isValueValid(req.params.item_id)) {
@@ -172,10 +163,7 @@ export default {
   emptyCart,
   moveItemToCartOrSafeForLater,
   //   removeItemFromCart,
-  //   moveToCart,
-  //   findItemsSavedForLater,
-  //   saveProductForLater,
+  findSavedForLaterItems,
   findtotalAmountFromCart,
-  //   findItemsFromCart,
   generateUniqueId
 }
