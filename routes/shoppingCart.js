@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import controller from '../controllers/shoppingCart'
-import validate, { checkUpdateCartValidity } from '../middlewares/validateRequest'
 import authenticate from '../middlewares/authenticate'
 import constants from '../constants/index'
 
