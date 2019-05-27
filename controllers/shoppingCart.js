@@ -54,7 +54,7 @@ function updateItemInCart () {
     let item_id = req.params.item_id
     if (globalfunc.isValueValid(item_id)) {
       let item = await service.updateItemInCart(item_id, { quantity: parseInt(req.body.quantity) })
-     
+
       if (item === null) {
         return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
           code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
@@ -120,27 +120,28 @@ function findItemsInCart () {
   })
 }
 
-// function moveToCart () {
-//   return asyncF(async (req, res) => {
-//     if (globalfunc.isValueValid(req.params.item_id)) {
-//       let item = await service.findItem()
-//       if (item === null) {
-//         return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//           code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
-//           message: constants.ERROR_CODES.ITM_02,
-//           field: 'item_id'
-//         })
-//       }
-//       await item.saveOrMoveToCart(constants.CART.MOVE_TO_CART)
-//       return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
-//     }
-//     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
-//       message: constants.ERROR_CODES.ITM_01,
-//       field: 'item_id'
-//     })
-//   })
-// }
+function moveItemToCart () {
+  return asyncF(async (req, res) => {
+    let item_id = req.params.item_id
+    if (globalfunc.isValueValid(item_id)) {
+      let item = await service.findItem(item_id)
+      if (item === null) {
+        return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+          code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
+          message: constants.ERROR_CODES.ITM_02,
+          field: 'item_id'
+        })
+      }
+      await service.moveOrSafeToCart(item_id, { buy_now: constants.CART.MOVE_TO_CART })
+      return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
+    return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+      code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
+      message: constants.ERROR_CODES.ITM_01,
+      field: 'item_id'
+    })
+  })
+}
 
 // function removeItemFromCart () {
 //   return asyncF(async (req, res) => {
@@ -180,11 +181,11 @@ function emptyCart () {
   })
 }
 export default {
-//   emptyCart,
   addItemToCart,
   findItemsInCart,
   updateItemInCart,
   emptyCart,
+  moveItemToCart,
   //   removeItemFromCart,
   //   moveToCart,
   //   findItemsSavedForLater,

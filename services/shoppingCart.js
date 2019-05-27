@@ -82,9 +82,13 @@ async function incrQuantity (cart, quantity) {
   )
 }
 
-async function saveOrMoveToCart (payload) {
+async function moveOrSafeToCart (item_id, payload) {
   // shoppingCart.buy_now = payload
   // await shopping_cart.create(shoppingCart)
+  return await shopping_cart.update(
+    { payload },
+    { returning: true, where: { item_id } }
+  )
 }
 async function findProduct (product_id) {
   let productPath = process.env.PRODUCT_PATH + '' + product_id
@@ -103,9 +107,10 @@ export default {
   newCart,
   incrQuantity,
   emptyCart,
+  moveOrSafeToCart,
   //   createCart,
   //   findProducts,
-  //   findItem,
+  findItem,
   //   findCart,
   updateItemInCart,
   findAllSavedItems,
