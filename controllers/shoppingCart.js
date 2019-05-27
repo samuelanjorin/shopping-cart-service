@@ -29,8 +29,8 @@ function addItemToCart () {
     } else {
       service.incrQuantity(cart, 1)
     }
-    let response = await globalfunc.getCartInfo(cart_id)
-    return res.json(response).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
+    return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
   })
 }
 
@@ -62,8 +62,8 @@ function updateItemInCart () {
           field: 'item_id'
         })
       }
-      let response = await globalfunc.getCartInfo(item.cart_id)
-      return res.json(response).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      let { itemArray } = await globalfunc.getItemInfo(item.cart_id, constants.CART.MOVE_TO_CART)
+      return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
@@ -73,28 +73,13 @@ function updateItemInCart () {
   })
 }
 
-// function findtotalAmountFromCart () {
-//   return asyncF(async (req, res) => {
-//     const { cart_id } = req.params
-
-//     const products = await service.findProducts(cart_id)
-//     if (!isEmpty(products)) {
-//       const totalCount = products.reduce((total_amount, item) => {
-//         return total_amount += item.quantity * item.Product.price -
-//                             item.Product.discounted_price
-//       }, 0)
-//       const result = {
-//         total_amount: totalCount
-//       }
-//       return res.json(result).status(constants.NETWORK_CODES.HTTP_SUCCESS)
-//     }
-//     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
-//       message: constants.ERROR_CODES.CRT_01,
-//       field: 'cart_id'
-//     })
-//   })
-// }
+function findtotalAmountFromCart () {
+  return asyncF(async (req, res) => {
+    const { cart_id } = req.params
+    const { subtotal } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
+    return res.json({ totalAmount: subtotal }).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+  })
+}
 
 // function saveProductForLater () {
 //   return asyncF(async (req, res) => {
@@ -109,8 +94,8 @@ function findItemsInCart () {
     const { cart_id } = req.params
     const allItems = await service.findAllSavedItems(cart_id)
     if (!isEmpty(allItems)) {
-      let response = await globalfunc.getCartInfo(cart_id)
-      return res.json(response).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
+      return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),
@@ -168,8 +153,8 @@ function moveItemToCartOrSafeForLater (option) {
 function emptyCart () {
   return asyncF(async (req, res) => {
     const { cart_id } = req.params
-    let cart = await globalfunc.getCartInfo(cart_id)
-    if (!isEmpty(cart)) {
+    let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
+    if (!isEmpty(itemArray)) {
       await service.emptyCart(cart_id)
       return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
@@ -190,7 +175,7 @@ export default {
   //   moveToCart,
   //   findItemsSavedForLater,
   //   saveProductForLater,
-  //   findtotalAmountFromCart,
+  findtotalAmountFromCart,
   //   findItemsFromCart,
   generateUniqueId
 }

@@ -13,9 +13,7 @@ router.put('/update/:item_id', controller.updateItemInCart())
 router.delete('/empty/:cart_id', controller.emptyCart())
 router.get('/moveToCart/:item_id', controller.moveItemToCartOrSafeForLater(constants.CART.MOVE_TO_CART))
 router.get('/safeForLater/:item_id', controller.moveItemToCartOrSafeForLater(constants.CART.SAVE_FOR_LATER))
-// router.get('/totalAmount/:cart_id',
-//   controller.getTotalAmountFromCart())
-// router.get('/saveForLater/:item_id', controller.saveProductForLater())
+router.get('/totalAmount/:cart_id', controller.findtotalAmountFromCart())
 
 // router.get('/getSaved/:cart_id', controller.getItemsSavedForLater())
 

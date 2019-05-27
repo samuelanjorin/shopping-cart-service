@@ -46,11 +46,20 @@ async function emptyCart (cart_id) {
   })
 }
 
-async function findAllSavedItems (cart_id) {
+async function findAllCartItems (cart_id) {
   return await shopping_cart.findAll({
     where: {
       cart_id,
       buy_now: constants.CART.MOVE_TO_CART
+    }
+  })
+}
+
+async function findAllSavedItems (cart_id) {
+  return await shopping_cart.findAll({
+    where: {
+      cart_id,
+      buy_now: constants.CART.SAVE_FOR_LATER
     }
   })
 }
@@ -115,4 +124,5 @@ export default {
   //   findCart,
   updateItemInCart,
   findAllSavedItems,
+  findAllCartItems,
   findProduct }

@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import shortId from 'shortid'
 import service from '../services/shoppingCart'
+import constants from '../constants/index'
 function getKeyByValue (object, value) {
   return Object.keys(object).find(key => object[key] === value)
 }
@@ -41,8 +42,13 @@ function getToken (req) {
   const userKey = user_key.split(' ')
   return userKey[1]
 }
-async function getCartInfo (cart_id) {
-  let items = await service.findAllSavedItems(cart_id)
+async function getItemInfo (cart_id, option) {
+  let items
+  if (option === constants.CART.MOVE_TO_CART) {
+    items = await service.findAllCartItems(cart_id)
+  } else {
+    items = await service.findAllSavedItems(cart_id)
+  }
 
   var itemArray = []
   let subtotal = 0
@@ -63,14 +69,14 @@ async function getCartInfo (cart_id) {
     }
     itemArray.push(productObj)
   }
-  return itemArray
+  return { itemArray, subtotal }
 }
 
 export default { getKeyByValue,
   getUniqueId,
   getPageParams,
   isValueValid,
-  getCartInfo,
+  getItemInfo,
   convertObjectValuesRecursive,
   getToken
 }
