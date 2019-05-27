@@ -55,7 +55,7 @@ async function getCartInfo (cart_id) {
       item_id: item.dataValues.item_id,
       name: product.name,
       attributes: item.dataValues.attributes,
-      product_id: item.dataValues,
+      product_id: item.dataValues.product_id,
       price: product.price,
       quantity: item.dataValues.quantity,
       image: product.image,
