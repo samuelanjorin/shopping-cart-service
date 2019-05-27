@@ -42,7 +42,7 @@ function addItemToCart () {
 //       return res.json(formatCart(items)).status(constants.NETWORK_CODES.HTTP_SUCCESS)
 //     }
 //     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
+//       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
 //       message: constants.ERROR_CODES.CRT_01,
 //       field: 'cart_id'
 //     })
@@ -57,7 +57,7 @@ function updateItemInCart () {
      
       if (item === null) {
         return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-          code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
+          code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
           message: constants.ERROR_CODES.ITM_02,
           field: 'item_id'
         })
@@ -66,7 +66,7 @@ function updateItemInCart () {
       return res.json(response).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-      code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
+      code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
       message: constants.ERROR_CODES.ITM_01,
       field: 'item_id'
     })
@@ -89,7 +89,7 @@ function updateItemInCart () {
 //       return res.json(result).status(constants.NETWORK_CODES.HTTP_SUCCESS)
 //     }
 //     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
+//       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
 //       message: constants.ERROR_CODES.CRT_01,
 //       field: 'cart_id'
 //     })
@@ -113,8 +113,8 @@ function findItemsInCart () {
       return res.json(response).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-      code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.SVD_02),
-      message: constants.ERROR_CODES.SVD_02,
+      code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),
+      message: constants.ERROR_CODES.CRT_02,
       field: 'item_id'
     })
   })
@@ -126,7 +126,7 @@ function findItemsInCart () {
 //       let item = await service.findItem()
 //       if (item === null) {
 //         return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//           code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
+//           code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
 //           message: constants.ERROR_CODES.ITM_02,
 //           field: 'item_id'
 //         })
@@ -135,7 +135,7 @@ function findItemsInCart () {
 //       return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
 //     }
 //     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
+//       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
 //       message: constants.ERROR_CODES.ITM_01,
 //       field: 'item_id'
 //     })
@@ -148,7 +148,7 @@ function findItemsInCart () {
 //       let item = await service.findItem()
 //       if (item === null) {
 //         return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//           code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
+//           code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
 //           message: constants.ERROR_CODES.ITM_02,
 //           field: 'item_id'
 //         })
@@ -157,33 +157,34 @@ function findItemsInCart () {
 //       return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
 //     }
 //     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
+//       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
 //       message: constants.ERROR_CODES.ITM_01,
 //       field: 'item_id'
 //     })
 //   })
 // }
 
-// function emptyCart () {
-//   return asyncF(async (req, res) => {
-//     const { cart_id } = req.params
-//     const cart = await service.getProducts(cart_id, false)
-//     if (!isEmpty(cart)) {
-//       await service.dropCart(cart_id)
-//       return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
-//     }
-//     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-//       code: globalfunc.findKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
-//       message: constants.ERROR_CODES.CRT_01,
-//       field: 'cart_id'
-//     })
-//   })
-// }
+function emptyCart () {
+  return asyncF(async (req, res) => {
+    const { cart_id } = req.params
+    let cart = await globalfunc.getCartInfo(cart_id)
+    if (!isEmpty(cart)) {
+      await service.emptyCart(cart_id)
+      return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    }
+    return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+      code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
+      message: constants.ERROR_CODES.CRT_01,
+      field: 'cart_id'
+    })
+  })
+}
 export default {
 //   emptyCart,
   addItemToCart,
   findItemsInCart,
   updateItemInCart,
+  emptyCart,
   //   removeItemFromCart,
   //   moveToCart,
   //   findItemsSavedForLater,

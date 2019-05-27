@@ -3,7 +3,7 @@ const ERROR_CODES = Object.freeze({
   AUT_02: 'Access Unauthorized.',
   NOAUTH: 'NoAuth',
   CRT_02: 'No cart exist with this ID',
-  CRT_01: 'No the cart is empty',
+  CRT_01: 'The cart is empty',
   PRD_01: 'No product with this ID',
   ITM_01: 'No item exist with this ID'
 

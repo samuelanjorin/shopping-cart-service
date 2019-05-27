@@ -9,7 +9,7 @@ router.get('/generateUniqueId', controller.generateUniqueId())
 router.post('/add', authenticate.verifyUser, controller.addItemToCart())
 router.get('/:cart_id', controller.findItemsInCart())
 router.put('/update/:item_id', controller.updateItemInCart())
-
+router.delete('/empty/:cart_id', controller.emptyCart())
 // router.get('/totalAmount/:cart_id',
 //   controller.getTotalAmountFromCart())
 // router.get('/saveForLater/:item_id', controller.saveProductForLater())
@@ -18,5 +18,4 @@ router.put('/update/:item_id', controller.updateItemInCart())
 // router.get('/moveToCart/:item_id', controller.moveToCart())
 // router.delete('/removeProduct/:item_id', controller.removeItemFromCart())
 
-// router.delete('/empty/:cart_id', controller.emptyCart())
 export default router

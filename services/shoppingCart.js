@@ -38,13 +38,13 @@ async function newCart (payload) {
   return await shopping_cart.create(payload)
 }
 
-// async function dropCart (cart_id) {
-//   return await shopping_cart.destroy({
-//     where: {
-//       cart_id
-//     }
-//   })
-// }
+async function emptyCart (cart_id) {
+  return await shopping_cart.destroy({
+    where: {
+      cart_id
+    }
+  })
+}
 
 async function findAllSavedItems (cart_id) {
   return await shopping_cart.findAll({
@@ -102,7 +102,7 @@ export default {
   checkCart,
   newCart,
   incrQuantity,
-  //   dropCart,
+  emptyCart,
   //   createCart,
   //   findProducts,
   //   findItem,
