@@ -9,7 +9,7 @@ import globalfunc from '../utils/globalfunc'
 
 function generateUniqueId () {
   return asyncF((req, res) => {
-    res.json({ cart_id: globalfunc.getUniqueId() }).status(constants.HTTP_SUCCESS)
+    res.status(constants.HTTP_SUCCESS).json({ cart_id: globalfunc.getUniqueId() })
   })
 }
 
@@ -30,7 +30,7 @@ function addItemToCart () {
       service.incrQuantity(cart, 1)
     }
     let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
-    return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
   })
 }
 
@@ -48,7 +48,7 @@ function updateItemInCart () {
         })
       }
       let { itemArray } = await globalfunc.getItemInfo(item.cart_id, constants.CART.MOVE_TO_CART)
-      return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
@@ -62,7 +62,7 @@ function findtotalAmountFromCart () {
   return asyncF(async (req, res) => {
     const { cart_id } = req.params
     const { subtotal } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
-    return res.json({ totalAmount: subtotal }).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+    return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json({ totalAmount: subtotal })
   })
 }
 
@@ -72,7 +72,7 @@ function findItemsInCart () {
     const allItems = await service.findAllCartItems(cart_id)
     if (!isEmpty(allItems)) {
       let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
-      return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),
@@ -95,7 +95,7 @@ function moveItemToCartOrSafeForLater (option) {
         })
       }
       await service.moveOrSafeToCart(item_id, { buy_now: option })
-      return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json([])
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
@@ -110,7 +110,7 @@ function findSavedForLaterItems () {
     const allItems = await service.findAllSavedItems(cart_id)
     if (!isEmpty(allItems)) {
       let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.SAVE_FOR_LATER)
-      return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),
@@ -132,7 +132,7 @@ function removeItemFromCart () {
         })
       }
       await service.removeItem(item_id)
-      return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json([])
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
@@ -148,7 +148,7 @@ function emptyCart () {
     let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
     if (!isEmpty(itemArray)) {
       await service.emptyCart(cart_id)
-      return res.json([]).status(constants.NETWORK_CODES.HTTP_SUCCESS)
+      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json([])
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_01),
