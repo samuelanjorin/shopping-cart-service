@@ -18,7 +18,7 @@ const {
 } = process.env
 
 export default {
-  database: {
+  development: {
     name: DATABASE_NAME,
     username: DATABASE_USERNAME,
     host: DATABASE_HOST,
@@ -26,11 +26,19 @@ export default {
     dialect: DIALECT
   },
 
-  unitTestDatabase: {
+  test: {
     dbName: TEST_DATABASE_NAME,
     host: TEST_DATABASE_HOST,
     password: TEST_DATABASE_PASSWORD,
     dialect: TEST_DIALECT
+  },
+  
+  production: {
+    name: DATABASE_NAME,
+    username: DATABASE_USERNAME,
+    host: DATABASE_HOST,
+    password: DATABASE_PASSWORD,
+    dialect: DIALECT
   },
   appSecret: CLIENT_SECRET,
 
