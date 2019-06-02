@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=dev jest",
     "serve": "nodemon index.js --exec babel-node",
+    "migrate": "NODE_ENV=production babel-node  migrations/migrate.js",
     "compile": "babel src --out-dir .compiled --source-maps --watch"
   },
   "keywords": [],
@@ -43,6 +44,7 @@
     "sequelize": "^5.8.6",
     "sequelize-cli": "^5.4.0",
     "shortid": "^2.2.14",
+    "lodash.isempty": "^4.4.0",
     "winston": "^3.2.1"
   }
 }
