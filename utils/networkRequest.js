@@ -45,7 +45,7 @@ const getRequest = async function (url, headers) {
 
     return response
   } catch (err) {
-    // logger.error(err)
+    logger.error(err)
   }
 }
 export default { postRequest, getRequest }

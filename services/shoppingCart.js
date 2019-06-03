@@ -82,11 +82,13 @@ async function moveOrSafeToCart (item_id, payload) {
 }
 async function findProduct (product_id) {
   let productPath = process.env.PRODUCT_PATH + '' + product_id
+ 
   let product = await cache.checkCache(productPath)
-  if (product !== null) {
+ if (product !== null) {
     return product
   }
   let url = process.env.PRODUCT_URL + '' + product_id
+  
   product = await networkRequest.getRequest(url)
   return product
 }

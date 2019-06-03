@@ -56,6 +56,9 @@ async function getItemInfo (cart_id, option) {
   for (let i = 0; i < items.length; i++) {
     let item = items[i]
     let product = await service.findProduct(item.dataValues.product_id)
+    if (product === null) {
+      return null
+    }
     subtotal = parseInt(subtotal) + parseInt(product.price)
     let productObj = {
       item_id: item.dataValues.item_id,
