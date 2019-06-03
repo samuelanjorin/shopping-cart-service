@@ -9,7 +9,7 @@ import globalfunc from '../utils/globalfunc'
 
 function generateUniqueId () {
   return asyncF((req, res) => {
-    res.status(constants.HTTP_SUCCESS).json({ cart_id: globalfunc.getUniqueId() })
+    res.json({ cart_id: globalfunc.getUniqueId() }).status(constants.HTTP_SUCCESS)
   })
 }
 
@@ -17,7 +17,6 @@ function addItemToCart () {
   return asyncF(async (req, res) => {
     const { body: { cart_id, product_id, attributes } } = req
     const cart = await service.checkCart(cart_id, attributes, product_id)
-
     if (cart === null) {
       await service.newCart({
         cart_id,
@@ -29,8 +28,9 @@ function addItemToCart () {
     } else {
       service.incrQuantity(cart, 1)
     }
+
     let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
-    return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
+    return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
   })
 }
 
@@ -48,7 +48,7 @@ function updateItemInCart () {
         })
       }
       let { itemArray } = await globalfunc.getItemInfo(item.cart_id, constants.CART.MOVE_TO_CART)
-      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
+      return res.json(itemArray).status(constants.NETWORK_CODES.HTTP_SUCCESS)
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_01),
