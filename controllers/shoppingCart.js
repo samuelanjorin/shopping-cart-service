@@ -73,11 +73,9 @@ function findItemsInCart () {
     if (!isEmpty(allItems)) {
       let { itemArray, error } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
       if (error === null) {
-        console.log(itemArray)
         return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
       }
       return res.status(error.status).json({
-        
         code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),
         message: error.data.message,
         field: 'item_id'
