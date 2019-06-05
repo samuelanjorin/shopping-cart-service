@@ -33,19 +33,19 @@ const postRequest = function (url, headers, formData) {
 const getRequest = async function (url, headers) {
   try {
     let response
-    if (headers === (null || undefined)) {
+    if (headers) {
+      let headersConfig = {
+        headers
+      }
+      response = await axios.get(url, headersConfig)
+    } else {
       response = await axios.get(url)
     }
-
-    let headersConfig = {
-      headers
-    }
-
-    response = await axios.get(url, headersConfig)
 
     return response
   } catch (err) {
     logger.error(err)
+    return err.response
   }
 }
 export default { postRequest, getRequest }

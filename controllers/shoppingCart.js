@@ -71,8 +71,17 @@ function findItemsInCart () {
     const { cart_id } = req.params
     const allItems = await service.findAllCartItems(cart_id)
     if (!isEmpty(allItems)) {
-      let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
-      return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
+      let { itemArray, error } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)
+      if (error === null) {
+        console.log(itemArray)
+        return res.status(constants.NETWORK_CODES.HTTP_SUCCESS).json(itemArray)
+      }
+      return res.status(error.status).json({
+        
+        code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),
+        message: error.data.message,
+        field: 'item_id'
+      })
     }
     return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
       code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.CRT_02),

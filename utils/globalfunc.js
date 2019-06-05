@@ -55,10 +55,12 @@ async function getItemInfo (cart_id, option) {
 
   for (let i = 0; i < items.length; i++) {
     let item = items[i]
-    let product = await service.findProduct(item.dataValues.product_id)
-    if (product === null) {
-      return null
+    let response = await service.findProduct(item.dataValues.product_id)
+    if (response.status !== constants.NETWORK_CODES.HTTP_SUCCESS) {
+      return { itemArray: null, subtotal: null, error: response }
     }
+    let product = response.data || response
+    
     subtotal = parseInt(subtotal) + parseInt(product.price)
     let productObj = {
       item_id: item.dataValues.item_id,
@@ -72,7 +74,7 @@ async function getItemInfo (cart_id, option) {
     }
     itemArray.push(productObj)
   }
-  return { itemArray, subtotal }
+  return { itemArray, subtotal, error: null }
 }
 
 export default { getKeyByValue,

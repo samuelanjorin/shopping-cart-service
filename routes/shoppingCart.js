@@ -2,11 +2,12 @@ import { Router } from 'express'
 import controller from '../controllers/shoppingCart'
 import authenticate from '../middlewares/authenticate'
 import constants from '../constants/index'
+import validate from '../middlewares/validateRequest'
 
 const router = Router()
 
 router.get('/generateUniqueId', controller.generateUniqueId())
-router.post('/add', authenticate.verifyUser, controller.addItemToCart())
+router.post('/add', authenticate.verifyUser, validate, controller.addItemToCart())
 router.get('/:cart_id', controller.findItemsInCart())
 router.put('/update/:item_id', controller.updateItemInCart())
 router.delete('/empty/:cart_id', controller.emptyCart())

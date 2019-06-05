@@ -1,7 +1,8 @@
 import sequelize from '../config/database'
 import fs from 'fs'
 import path from 'path'
-import logger from '../utils/errors/errorlogger';
+import logger from '../utils/errors/errorlogger'
+
 
 
 const dir = path.join(__dirname, './db.sql')
