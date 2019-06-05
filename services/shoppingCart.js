@@ -4,6 +4,7 @@ import db from '../models/index'
 import constants from '../constants/index'
 import cache from '../utils/cache'
 import networkRequest from '../utils/networkRequest'
+import logger from '../utils/errors/errorlogger'
 
 const { shopping_cart } = db
 
@@ -82,15 +83,19 @@ async function moveOrSafeToCart (item_id, payload) {
 }
 async function findProduct (product_id) {
   let productPath = process.env.PRODUCT_PATH + '' + product_id
- 
-  let product = await cache.checkCache(productPath)
- if (product !== null) {
-    return product
+  let response = await cache.checkCache(productPath)
+  try {
+    if (response !== null) {
+      response.status = 200
+      //return response
+    }
+    let url = process.env.PRODUCT_URL + '' + product_id
+    response = await networkRequest.getRequest(url)
+    return response
+  } catch (err) {
+    logger.error(err.response)
+    return err.response
   }
-  let url = process.env.PRODUCT_URL + '' + product_id
-  
-  product = await networkRequest.getRequest(url)
-  return product
 }
 
 async function removeItem (item_id) {
