@@ -32,7 +32,6 @@ export default {
     password: TEST_DATABASE_PASSWORD,
     dialect: TEST_DIALECT
   },
-  
   production: {
     name: DATABASE_NAME,
     username: DATABASE_USERNAME,
