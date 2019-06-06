@@ -5,7 +5,9 @@ const ERROR_CODES = Object.freeze({
   CRT_02: 'No cart exist with this ID',
   CRT_01: 'The cart is empty',
   PRD_01: 'No product with this ID',
-  ITM_01: 'No item exist with this ID'
+  ITM_01: 'No item exist with this ID',
+  ITM_02: 'Invalid Attribute',
+  ITM_03: 'Unable to communicate with Items Service'
 
 })
 const CART = Object.freeze({

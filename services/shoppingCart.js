@@ -86,11 +86,33 @@ async function findProduct (product_id) {
   let response = await cache.checkCache(productPath)
   try {
     if (response !== null) {
-      response.status = 200
-      //return response
+      response.status = constants.NETWORK_CODES.HTTP_SUCCESS
+      return response
     }
     let url = process.env.PRODUCT_URL + '' + product_id
     response = await networkRequest.getRequest(url)
+    return response
+  } catch (err) {
+    logger.error(err.response)
+    return err.response
+  }
+}
+
+async function findProductAtrribute (product_id) {
+  let productAttributePath = process.env.PRODUCT_ATTRIBUTE_PATH + '' + product_id
+  let response = await cache.checkCache(productAttributePath)
+
+  try {
+    if (response !== null) {
+      response.status = constants.NETWORK_CODES.HTTP_SUCCESS
+      response.data = 'cache'
+      return response
+    }
+    let url = process.env.PRODUCT_ATTRIBUTE_URL + '' + product_id
+    response = await networkRequest.getRequest(url)
+    if (response.status === constants.NETWORK_CODES.HTTP_SUCCESS) {
+      await cache.addToCache(productAttributePath, response.data, constants.CACHE_TYPES.hour)
+    }
     return response
   } catch (err) {
     logger.error(err.response)
@@ -117,4 +139,5 @@ export default {
   updateItemInCart,
   findAllSavedItems,
   findAllCartItems,
-  findProduct }
+  findProduct,
+  findProductAtrribute }

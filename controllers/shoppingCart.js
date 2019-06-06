@@ -16,6 +16,37 @@ function generateUniqueId () {
 function addItemToCart () {
   return asyncF(async (req, res) => {
     const { body: { cart_id, product_id, attributes } } = req
+    let attributesArray = []
+    attributesArray = attributes.split(' ')
+    let attributesData
+    let productAttributes = await service.findProductAtrribute(product_id)
+    if (productAttributes.status !== constants.NETWORK_CODES.HTTP_SUCCESS) {
+      return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+        code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_03),
+        message: constants.ERROR_CODES.ITM_03,
+        field: 'product_id'
+      })
+    }
+    if (productAttributes.data === 'cache') {
+      attributesData = productAttributes
+    } else {
+      attributesData = productAttributes.data
+    }
+
+    const setAttributes = new Set()
+
+    attributesData.forEach((productAttribute) => {
+      setAttributes.add(productAttribute.attribute_value)
+    })
+    attributesArray.forEach((attribute) => {
+      if (setAttributes.has(attribute) === false) {
+        return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+          code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
+          message: constants.ERROR_CODES.ITM_02,
+          field: attribute
+        })
+      }
+    })
     const cart = await service.checkCart(cart_id, attributes, product_id)
     if (cart === null) {
       await service.newCart({
