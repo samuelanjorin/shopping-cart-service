@@ -60,14 +60,16 @@ async function getItemInfo (cart_id, option) {
       return { itemArray: null, subtotal: null, error: response }
     }
     let product = response.data || response
-    
-    subtotal = parseInt(subtotal) + parseInt(product.price)
+    let newPrice = product.price * item.dataValues.quantity
+    newPrice = Math.round(newPrice * 100) / 100
+    subtotal = parseFloat(subtotal) + parseFloat(newPrice)
+    subtotal = Math.round(subtotal * 100) / 100
     let productObj = {
       item_id: item.dataValues.item_id,
       name: product.name,
       attributes: item.dataValues.attributes,
       product_id: item.dataValues.product_id,
-      price: product.price,
+      price: newPrice,
       quantity: item.dataValues.quantity,
       image: product.image,
       subtotal

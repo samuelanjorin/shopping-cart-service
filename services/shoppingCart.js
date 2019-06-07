@@ -70,8 +70,9 @@ async function updateItemInCart (item_id, quantity) {
 async function incrQuantity (cart, quantity) {
   quantity = cart.quantity + parseInt(quantity)
   return await shopping_cart.update(
-    { quantity },
-    { returning: true, where: { cart_id: cart.cart_id, product_id: cart.product_id } }
+    { quantity
+    },
+    { where: { cart_id: cart.cart_id, product_id: cart.product_id } }
   )
 }
 
