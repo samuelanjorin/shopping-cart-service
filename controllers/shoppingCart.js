@@ -2,7 +2,6 @@
 /* eslint-disable camelcase */
 import isEmpty from 'lodash.isempty'
 import service from '../services/shoppingCart'
-// import formatCart, { prepareSavedItems } from '../utils/cart'
 import constants from '../constants/index'
 import asyncF from '../middlewares/async'
 import globalfunc from '../utils/globalfunc'
@@ -57,7 +56,7 @@ function addItemToCart () {
         buy_now: constants.CART.MOVE_TO_CART,
         added_on: new Date() })
     } else {
-      service.incrQuantity(cart, 1)
+      await service.incrQuantity(cart, 1)
     }
 
     let { itemArray } = await globalfunc.getItemInfo(cart_id, constants.CART.MOVE_TO_CART)

@@ -1,0 +1,13 @@
+REDIS_HOST=
+REDIS_PORT=
+TOKEN_EXPIRATION=24hr
+CLIENT_SECRET=
+DATABASE_NAME=
+DATABASE_USERNAME=
+DATABASE_HOST=
+DATABASE_PASSWORD=
+DIALECT=mysql
+PRODUCT_URL= Product URL e.g http://localhost:8000/items-service/v1/api/products/
+PRODUCT_PATH=/v1/api/products/
+PRODUCT_ATTRIBUTE_PATH=/v1/api/attributes/inProduct/
+PRODUCT_ATTRIBUTE_URL= Get Product Attribute  e.g http://localhost:8000/items-service/v1/api/attributes/inProduct/
