@@ -72,7 +72,7 @@ async function incrQuantity (cart, quantity) {
   return await shopping_cart.update(
     { quantity
     },
-    { where: { cart_id: cart.cart_id, product_id: cart.product_id } }
+    { where: { cart_id: cart.cart_id, attributes: cart.attributes, product_id: cart.product_id } }
   )
 }
 

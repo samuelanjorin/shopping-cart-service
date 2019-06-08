@@ -33,19 +33,22 @@ function addItemToCart () {
     }
 
     const setAttributes = new Set()
-
+    let invalid = null
     attributesData.forEach((productAttribute) => {
       setAttributes.add(productAttribute.attribute_value)
     })
     attributesArray.forEach((attribute) => {
       if (setAttributes.has(attribute) === false) {
-        return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
-          code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
-          message: constants.ERROR_CODES.ITM_02,
-          field: attribute
-        })
+        invalid = attribute
       }
     })
+    if (!isEmpty(invalid)) {
+      return res.status(constants.NETWORK_CODES.HTTP_BAD_REQUEST).json({
+        code: globalfunc.getKeyByValue(constants.ERROR_CODES, constants.ERROR_CODES.ITM_02),
+        message: constants.ERROR_CODES.ITM_02,
+        field: invalid
+      })
+    }
     const cart = await service.checkCart(cart_id, attributes, product_id)
     if (cart === null) {
       await service.newCart({
