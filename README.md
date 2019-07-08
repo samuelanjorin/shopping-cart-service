@@ -18,3 +18,10 @@ It handles the below Shopping Cart features:
 8. Save Item for Later: http://localhost:8000/shopping-carts-service/v1/api/shoppingcart/saveforlater/2
 9. Get Saved Item in Carts: http://3.130.189.86:8000/shopping-carts-service/v1/api/shoppingcart/getsaved/12345
 10. Get TotalAmount in Cart: http://3.130.189.86:8000/shopping-carts-service/v1/api/shoppingcart/totalAmount/12345
+
+# Microservice Architecture Documentation: https://drive.google.com/file/d/1d8kSf8xTtmmtyWEhn56nqC4CubaOv8Eg/view?usp=sharing
+
+
+
+
+
